@@ -1,6 +1,6 @@
 'use strict';
 
-const prompt = require('prompt-sync')();
+const prompt = require('prompt-sync')({ sigint: true });
 
 console.log("=========================================");
 console.log("=== Selamat Datang di Kalkulator CLI  ===");
@@ -72,6 +72,47 @@ function pangkat(a, b) {
   return a ** b;
 }
 
+// --- TAHAP 4: FUNCTION ANALISIS HASIL ---
+function analisisHasil(hasil) {
+  console.log("\n--- Analisis Hasil ---");
+
+  // Jika hasil null atau undefined (menggunakan nullish coalescing operator ??)
+  const safeHasil = hasil ?? "Fallback: Hasil tidak valid (null / undefined)";
+  if (hasil == null) {
+    console.log(safeHasil);
+    return;
+  }
+
+  // Jika hasil berupa string (misalnya error pembagian dengan nol)
+  if (typeof hasil === 'string') {
+    console.log("Analisis: Perhitungan dihentikan karena operasi tidak valid.");
+    return;
+  }
+
+  // Jika hasil berupa number
+  if (typeof hasil === 'number') {
+    // 1. Cek Positif, Negatif, atau Nol
+    let tanda = (hasil > 0) ? "Positif" : (hasil < 0) ? "Negatif" : "Nol";
+    
+    // 2. Cek Integer atau Desimal
+    let tipe = Number.isInteger(hasil) ? "Integer (Bulat)" : "Desimal (Pecahan)";
+    
+    // 3. Cek Genap atau Ganjil menggunakan logika AND (&&) / OR (||)
+    let genapGanjil = "";
+    if (Number.isInteger(hasil) && hasil % 2 === 0) {
+      genapGanjil = "Genap";
+    } else if (Number.isInteger(hasil) && Math.abs(hasil % 2) === 1) {
+      genapGanjil = "Ganjil";
+    } else {
+      genapGanjil = "Bukan Genap/Ganjil (karena desimal)";
+    }
+
+    console.log(`- Angka ini bernilai ${tanda}`);
+    console.log(`- Termasuk bilangan ${tipe}`);
+    console.log(`- Sifat angkanya adalah ${genapGanjil}`);
+  }
+}
+
 while (true) {
   console.log("--- Mulai Perhitungan ---");
   
@@ -109,6 +150,9 @@ while (true) {
   }
   
   console.log(`[Hasil] = ${hasil}`);
+  
+  // --- TAHAP 4: MEMANGGIL FUNGSI ANALISIS ---
+  analisisHasil(hasil);
   
   // Mekanisme exit (Tahap 1)
   console.log("\n-----------------------------------------");
