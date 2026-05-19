@@ -4,7 +4,8 @@ const prompt = require('prompt-sync')();
 
 console.log("=========================================");
 console.log("=== Selamat Datang di Kalkulator CLI  ===");
-console.log("=========================================\n");
+console.log("=========================================");
+console.log("📝 Info: Untuk angka desimal, gunakan titik (.) bukan koma (,)\n");
 
 // --- TAHAP 2: FUNCTION VALIDASI INPUT ---
 
