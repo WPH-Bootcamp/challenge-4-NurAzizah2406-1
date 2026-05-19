@@ -1,6 +1,6 @@
 'use strict';
 
-const prompt = require('prompt-sync')({ sigint: true });
+const prompt = require('prompt-sync')();
 
 console.log("=========================================");
 console.log("=== Selamat Datang di Kalkulator CLI  ===");
@@ -75,41 +75,42 @@ function pangkat(a, b) {
 // --- TAHAP 4: FUNCTION ANALISIS HASIL ---
 function analisisHasil(hasil) {
   console.log("\n--- Analisis Hasil ---");
-
-  // Jika hasil null atau undefined (menggunakan nullish coalescing operator ??)
-  const safeHasil = hasil ?? "Fallback: Hasil tidak valid (null / undefined)";
-  if (hasil == null) {
-    console.log(safeHasil);
+  
+  // Menggunakan ?? untuk fallback message jika hasil bernilai null/undefined
+  // (misalnya ada operator yang kelewatan di switch)
+  const nilaiAman = hasil ?? "Tidak ada hasil perhitungan yang bisa dianalisis.";
+  
+  // Cek jika null atau undefined
+  if (hasil == null) { 
+    console.log(`- ${nilaiAman}`);
     return;
   }
-
-  // Jika hasil berupa string (misalnya error pembagian dengan nol)
+  
+  // Mengecek menggunakan typeof
   if (typeof hasil === 'string') {
-    console.log("Analisis: Perhitungan dihentikan karena operasi tidak valid.");
-    return;
-  }
-
-  // Jika hasil berupa number
-  if (typeof hasil === 'number') {
-    // 1. Cek Positif, Negatif, atau Nol
-    let tanda = (hasil > 0) ? "Positif" : (hasil < 0) ? "Negatif" : "Nol";
+    // Jika string (biasanya karena me-return error message)
+    console.log(`- ❌ Peringatan: ${hasil}`);
     
-    // 2. Cek Integer atau Desimal
-    let tipe = Number.isInteger(hasil) ? "Integer (Bulat)" : "Desimal (Pecahan)";
+  } else if (typeof hasil === 'number') {
+    // Menggunakan Ternary Operator untuk Positif, Negatif, Nol
+    const sifat = (hasil > 0) ? "Positif" : ((hasil < 0) ? "Negatif" : "Nol");
     
-    // 3. Cek Genap atau Ganjil menggunakan logika AND (&&) / OR (||)
-    let genapGanjil = "";
-    if (Number.isInteger(hasil) && hasil % 2 === 0) {
-      genapGanjil = "Genap";
-    } else if (Number.isInteger(hasil) && Math.abs(hasil % 2) === 1) {
-      genapGanjil = "Ganjil";
+    // Menggunakan Number.isInteger() untuk cek bentuk angka
+    const bentuk = Number.isInteger(hasil) ? "Integer (Bulat)" : "Desimal";
+    
+    // Menggunakan logika (&&) dan if/else untuk genap/ganjil
+    let paritas = "";
+    if (Number.isInteger(hasil) && hasil !== 0) {
+      paritas = (hasil % 2 === 0) ? "Genap" : "Ganjil";
+    } else if (hasil === 0) {
+      paritas = "Nol (Netral)";
     } else {
-      genapGanjil = "Bukan Genap/Ganjil (karena desimal)";
+      paritas = "Tidak relevan (karena angka desimal)";
     }
-
-    console.log(`- Angka ini bernilai ${tanda}`);
-    console.log(`- Termasuk bilangan ${tipe}`);
-    console.log(`- Sifat angkanya adalah ${genapGanjil}`);
+    
+    console.log(`- Angka ini bernilai ${sifat}`);
+    console.log(`- Tipe bilangan adalah ${bentuk}`);
+    console.log(`- Paritas: ${paritas}`);
   }
 }
 
@@ -151,7 +152,7 @@ while (true) {
   
   console.log(`[Hasil] = ${hasil}`);
   
-  // --- TAHAP 4: MEMANGGIL FUNGSI ANALISIS ---
+  // --- TAHAP 4: MEMANGGIL ANALISIS ---
   analisisHasil(hasil);
   
   // Mekanisme exit (Tahap 1)
