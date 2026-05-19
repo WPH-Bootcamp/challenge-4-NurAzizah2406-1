@@ -155,13 +155,24 @@ while (true) {
   // --- TAHAP 4: MEMANGGIL ANALISIS ---
   analisisHasil(hasil);
   
-  // Mekanisme exit (Tahap 1)
+  // --- TAHAP 5: MEKANISME EXIT DENGAN VALIDASI ---
   console.log("\n-----------------------------------------");
-  const isLanjut = prompt("Apakah kamu ingin melakukan perhitungan lagi? (yes/no): ").toLowerCase();
+  let isLanjut;
+  
+  while (true) {
+    isLanjut = prompt("Apakah kamu ingin melakukan perhitungan lagi? (yes/no): ").toLowerCase();
+    
+    // Cek apakah input valid
+    if (isLanjut === 'yes' || isLanjut === 'no' || isLanjut === 'exit') {
+      break; // Keluar dari loop validasi (lanjut ke pengecekan if di bawah)
+    } else {
+      console.log("❌ Input tidak valid! Harap ketikkan 'yes' atau 'no'.");
+    }
+  }
   
   if (isLanjut === 'no' || isLanjut === 'exit') {
     console.log("Terima kasih telah menggunakan kalkulator ini. Sampai jumpa!");
-    break; // Menghentikan loop utama
+    break; // Menghentikan loop utama kalkulator
   }
   console.log("\n"); // Memberi jarak untuk perhitungan selanjutnya
 }
