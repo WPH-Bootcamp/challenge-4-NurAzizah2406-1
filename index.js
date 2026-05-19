@@ -39,6 +39,39 @@ function getValidOperator() {
   }
 }
 
+// --- TAHAP 3: FUNCTION OPERASI MATEMATIKA ---
+function tambah(a, b) {
+  return a + b;
+}
+
+function kurang(a, b) {
+  return a - b;
+}
+
+function kali(a, b) {
+  return a * b;
+}
+
+function bagi(a, b) {
+  // Edge case: tidak bisa bagi dengan nol
+  if (b === 0) {
+    return "Error: Tidak bisa dibagi dengan nol!";
+  }
+  return a / b;
+}
+
+function modulo(a, b) {
+  // Edge case: tidak bisa modulo dengan nol
+  if (b === 0) {
+    return "Error: Tidak bisa di-modulo dengan nol!";
+  }
+  return a % b;
+}
+
+function pangkat(a, b) {
+  return a ** b;
+}
+
 while (true) {
   console.log("--- Mulai Perhitungan ---");
   
@@ -47,8 +80,35 @@ while (true) {
   const operator = getValidOperator();
   const angka2 = getValidNumber("Masukkan angka kedua: ");
   
-  console.log(`\n[Info] Kamu akan menghitung: ${angka1} ${operator} ${angka2}`);
-  console.log("(Logika operasi perhitungannya akan ditambahkan di tahap selanjutnya...)");
+  console.log(`\n[Info] Menghitung: ${angka1} ${operator} ${angka2}`);
+  
+  // --- TAHAP 3: LOGIKA UTAMA (SWITCH CASE) ---
+  let hasil;
+  
+  switch (operator) {
+    case '+':
+      hasil = tambah(angka1, angka2);
+      break;
+    case '-':
+      hasil = kurang(angka1, angka2);
+      break;
+    case '*':
+      hasil = kali(angka1, angka2);
+      break;
+    case '/':
+      hasil = bagi(angka1, angka2);
+      break;
+    case '%':
+      hasil = modulo(angka1, angka2);
+      break;
+    case '**':
+      hasil = pangkat(angka1, angka2);
+      break;
+    default:
+      hasil = "Error: Operator tidak dikenali.";
+  }
+  
+  console.log(`[Hasil] = ${hasil}`);
   
   // Mekanisme exit (Tahap 1)
   console.log("\n-----------------------------------------");
